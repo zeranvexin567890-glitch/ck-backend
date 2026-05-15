@@ -5,13 +5,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// GET ရော POST ရော လမ်းကြောင်းနှစ်ခုလုံးမှာ အဖြေထုတ်ပေးရန် ပြင်ဆင်ခြင်း
-const handlePrediction = (req, res) => {
-    res.json({ result: "WIN 🎰" });
-};
+// အဓိက လမ်းကြောင်း နှစ်ခုလုံးကို အသေချာဆုံး လုပ်ဆောင်ပေးရန်
+app.get('/predict', (req, res) => {
+    res.status(200).json({ result: "WIN 🎰" });
+});
 
-app.get('/predict', handlePrediction);
-app.post('/predict', handlePrediction);
+app.post('/predict', (rawReq, res) => {
+    res.status(200).json({ result: "WIN 🎰" });
+});
 
-// Vercel Serverless Function အတွက် အဆင်ပြေအောင် ဆာဗာပတ်လမ်းကြောင်းကို Export လုပ်ပေးခြင်း
+// ဆာဗာ အလုပ်လုပ်မလုပ် စမ်းသပ်ရန် (အကယ်၍ လင့်ခ်သက်သက်ပဲ ဝင်ကြည့်ရင်လည်း WIN ထွက်အောင်)
+app.get('/', (req, res) => {
+    res.status(200).json({ result: "WIN 🎰" });
+});
+
 module.exports = app;
