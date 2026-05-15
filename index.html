@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CK AI Smart Predictor</title>
+    <style>
+        /* သင့်ရဲ့ မူလ Style ပုံစံများ */
+        body {
+            background-color: #0b132b;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #1c2541;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+            width: 350px;
+        }
+        h1 {
+            color: #4cc9f0;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #a2a2a2;
+            font-size: 14px;
+        }
+        .result-box {
+            border: 2px dashed #4cc9f0;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: #cbd5e1;
+        }
+        .btn {
+            background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.4);
+        }
+        #statusText {
+            color: #94a3b8;
+            margin-top: 15px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>CK AI SMART PREDICTOR</h1>
+    <p>နောက်တစ်ကြိမ် ထွက်မည့်အဖြေ ခန့်မှန်းချက်</p>
+    
+    <div class="result-box" id="resultText">WAITING</div>
+    
+    <button class="btn" onclick="getAIPrediction()">GET AI PREDICTION</button>
+    
+    <div id="statusText">Recent 5 Results: --</div>
+</div>
+
+<script>
+    // AI Prediction ခလုတ်ကို နှိပ်တဲ့အခါ အလုပ်လုပ်မည့်အပိုင်း
+    async function getAIPrediction() {
+        const statusText = document.getElementById('statusText');
+        const resultText = document.getElementById('resultText');
+        
+        statusText.innerText = "AI အဖြေရှာပေးနေပါပြီ၊ ခဏစောင့်ပေးပါ...";
+        resultText.innerText = "🔄";
+
+        try {
+            // သင့်ရဲ့ ဗာဆယ်ဆာဗာလင့်ခ်အသစ်ကို /predict ခေါင်းစဉ်တပ်ပြီး ချိန်ဆက်ထားပါတယ်
+            const response = await fetch('https://ck-backend-alpha.vercel.app/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: "Hello AI" 
+                })
+            });
+
+            const data = await response.json();
+            
+            // ဆာဗာက ပြန်ပေးတဲ့ အဖြေကို မျက်နှာပြင်ပေါ်တွင် ပြသခြင်း
+            resultText.innerText = data.reply;
+            statusText.innerText = "အောင်မြင်ပါသည်!";
+
+        } catch (error) {
+            console.error("Error:", error);
+            resultText.innerText = "ERROR";
+            statusText.innerText = "ချိတ်ဆက်မှု အဆင်မပြေပါ။ နောက်မှ ပြန်ကြိုးစားပါ။";
+        }
+    }
+</script>
+
+</body>
+</html>
